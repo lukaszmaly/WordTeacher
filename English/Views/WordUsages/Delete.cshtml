@@ -1,0 +1,40 @@
+﻿@model English.Models.WordUsage
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>WordUsage</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.EnglishWord)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Entry.EnglishWord)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Usage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Usage)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

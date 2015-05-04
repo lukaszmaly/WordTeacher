@@ -1,0 +1,26 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+   background: url("landscape.png") no-repeat bottom center fixed #e9e9e9;
+}
+
+/* Set padding to keep content from hitting the edges url("//d7mj4aqfscim2.cloudfront.net/images/landscape_isolated@1x_mv_e529987ee32668f872869e58b366a176.png")*/
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}

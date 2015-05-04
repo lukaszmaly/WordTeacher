@@ -1,0 +1,33 @@
+﻿@using English.Models
+@model English.Models.Entry
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Entry</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EnglishWord)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EnglishWord)
+        </dd>
+        @foreach (WordUsage str in Model.Usages)
+        {
+          
+            <p>
+                @Html.DisplayFor(model => str.Usage)
+            </p>
+        }
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.EntryId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

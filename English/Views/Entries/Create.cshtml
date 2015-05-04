@@ -1,0 +1,73 @@
+﻿@model English.Models.Entry
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Entry</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.EnglishWord, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EnglishWord, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EnglishWord, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Visible, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Visible, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Visible, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+        <input type="button" id="AddUsage" name="AddUsage" value="Add Usage"/>
+        <div id="usages">
+            <p>Lista</p>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    
+    <script type="text/javascript">
+        var i = 0;
+        $(document).ready(function() {
+            $("#AddUsage").click(function() {
+                var newEntry = $("<p>Usage: <input type='text' name='usage" + i + "'/><input type='button' class='remove' value='Remove' id='remove" + i + "'/> </p>");
+                $("#usages").append(newEntry);
+                newEntry.hide().fadeIn(500);
+                i = i + 1;
+            });
+            $("#usages").on("click", ".remove", function() {
+                $(this).parent().fadeOut(250, function() {
+                    $(this).remove();
+                });
+
+            });
+
+        });
+
+    </script>
+
+}

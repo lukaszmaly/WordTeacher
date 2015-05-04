@@ -1,0 +1,34 @@
+﻿@model English.Models.WordUsage
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>WordUsage</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.EnglishWord)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Entry.EnglishWord)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Usage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Usage)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.WordUsageId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

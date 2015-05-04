@@ -1,0 +1,117 @@
+﻿@model English.ViewModels.WordForUser
+
+@{
+    ViewBag.Title = "Index";
+}
+<h2 id="doZamiany">fdgd</h2>
+
+
+
+<p>@Model.GameUser.UserName</p>
+
+<h2 id="Points">@Model.GameUser.Points</h2>
+
+
+<div style="text-align: center;">
+
+    <div id="game" style="margin-left: auto;margin-right: auto;">
+        <p id="Word"></p>
+
+
+
+
+</div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"> </script>
+
+    <script type="text/javascript">
+
+        function AddPoints(n) {
+            var haze = $('<h2 style="position:absolute;">+' + n + '!</h2>');
+            var p = parseInt($("#Points").text());
+            p = p + n;
+            $("#Points").text(p);
+            var y = $("#Points").position().top;
+            haze.insertBefore("#Points");
+            haze.css("top", y + "px");
+            haze.animate({ opacity: 0, top: y - 20 }, 600, function() {});
+
+        }
+
+        var button = $('<p><input type="text" name="question" id="Question"/><p>' +
+            '<p><input type="button" id="Next" value="Check" name="next"/></p>' +
+            '<div id="AlternativeForms"></div>');
+        var i = 0;
+        var a = [];
+        var word = "";
+        var id = 0;
+
+        $("#game").on("click", "#Next", function() {
+
+            if ($("#Next").val() === "Check") {
+
+                if (a.indexOf($("#Question").val()) != -1) {
+
+                  
+                    AlternativeWords();
+                    AddPoints(20);
+                } else {
+                    alert("zle");
+                }
+                $("#Next").val("Next Word");
+            } else {
+                $("#AlternativeForms").hide();
+              
+                GetNewWord();
+            }
+        });
+
+
+        function GetNewWord() {
+            $.ajax({
+                url: "/Learn/GetSandwitches",
+                type: "POST",
+                data: { a: "sdfsd" }
+               
+               
+
+            }).success(function(data) {
+                data = data.replace(/&quot;/ig, '"');
+                var jqObj = JSON.parse(data);
+                $("#Word").text(jqObj["EnglishWord"]);
+                a = [];
+                for (var i = 0; i < jqObj["Usages"].length; i++) {
+                    a.push(jqObj["Usages"][i]["Usage"]);
+                }
+                $("#Next").val("Check");
+                $("#Question").val("");
+            });
+
+    }
+
+
+        function AlternativeWords() {
+
+            $("#AlternativeForms").html("").show();
+        var additional = $("<p>Alternative proper answers:</p>");
+        $("#AlternativeForms").append(additional);
+        additional.hide().fadeIn(500);
+        for (var i = 0; i < a.length; i++) {
+            if (a[i] === $("#question").val()) continue;
+            var additional1 = $("<p>" + a[i] + "</p>");
+            $("#AlternativeForms").append(additional1);
+            additional1.hide().fadeIn(500);
+        }
+    }
+
+    $(document).ready(function() {
+        GetNewWord();
+        $("#game").append(button);
+    });
+
+    </script>
+}
