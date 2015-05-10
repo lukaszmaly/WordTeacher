@@ -47,7 +47,7 @@ namespace English.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseId,CourseName,Visible")] Course course)
+        public ActionResult Create([Bind(Include = "CourseId,CourseName,Visible,Cost")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -58,6 +58,11 @@ namespace English.Controllers
 
             return View(course);
         }
+
+
+      
+
+
 
         // GET: Courses/Edit/5
         public ActionResult Edit(int? id)
@@ -79,7 +84,7 @@ namespace English.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CourseId,CourseName,Visible")] Course course)
+        public ActionResult Edit([Bind(Include = "CourseId,CourseName,Visible,Cost")] Course course)
         {
             if (ModelState.IsValid)
             {

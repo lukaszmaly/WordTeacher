@@ -14,7 +14,11 @@ namespace English.Models
         public string CourseName { get; set; }
 
         public bool Visible { get; set; }
-
+         [Display(Name = "Is this course paid?")]
+        public bool Paid { get; set; }
+         [Display(Name = "Course Cost" )]
+        [Range(1,999,ErrorMessage = "[1-999]")]
+        public int?  Cost { get; set; }
         public virtual ICollection<Entry> Entries { get; set; }
 
     }
