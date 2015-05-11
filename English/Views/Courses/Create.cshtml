@@ -4,6 +4,8 @@
     ViewBag.Title = "Create";
 }
 
+
+
 <h2>Create</h2>
 
 @using (Html.BeginForm()) 
@@ -86,20 +88,22 @@
         <div id="fragment-2">
        
             <div class="form-horizontal">
+                <h4>Words in Course</h4>
+                <hr />
                 <div class="form-group">
+                  
                     <div class="col-md-10">
-                        <h4>Words in Course</h4>
-                        <hr />
-                        <input type="button" id="AddWord" value="Add"/>
-                        @Html.TextBox("Country")
-                        <div id ="Words">
-                            
-                        </div>
-                     
+                        @Html.TextBox("Country", "", new { @class = "form-control" })
+                        <input type="button" id="AddWord" class="btn btn-default" value="Add"/>
 
+                       
+                        <div class="wrap">
+
+                        </div>
                     </div>
-                    </div>
+                    
                 </div>
+            </div>
 
         
         
@@ -128,6 +132,7 @@
 @section Scripts
 {
     @Styles.Render("~/Content/themes/base/autocomplete.css")
+@Styles.Render("~/Content/themes/base/wrap.css")
     @Scripts.Render("~/bundles/jqueryval")
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"> </script>
@@ -137,18 +142,20 @@
         var allData = [];
         var wordsId = [];
         var stringWords = [];
-        
+
 
         $(document).ready(function() {
 
 
-            $("#AddWord").click(function () {
+            $("#AddWord").click(function() {
                 for (var j = 0; j < allData.length; j++) {
                     if (allData[j].EnglishWord === $('#Country').val() && wordsId.indexOf(allData[j].EntryId) === -1) {
                         wordsId.push(allData[j].EntryId);
                         stringWords.push(allData[j].EnglishWord);
-                        var newEntry = $("<p>Usage: <input type='text' class='buut' readonly name='usage" + i + "' value='" + $('#Country').val() + "'/><input type='button' class='remove' value='Remove' id='remove" + i + "'/> </p>");
-                        $("#Words").append(newEntry);
+                        var newEntry = $(" " +
+                            "" +
+                            "  <div class='box'> <span id='remove" + i + "' class='close-btn'><a href='#'>X</a></span> <div class='boxInner'>  <p> " + $('#Country').val() + " </p>   </div> <input type='hidden' class='buut' readonly name='usage" + i + "' value='" + $('#Country').val() + "'/></div>");
+                        $(".wrap").append(newEntry);
                         newEntry.hide().fadeIn(500);
                         var ss = JSON.stringify(wordsId);
                         $("#IndexArray").val(ss);
@@ -157,14 +164,13 @@
                 }
 
             });
-            $("#Words").on("click", ".remove", function () {
-                $(this).parent().fadeOut(250, function () {
 
 
-
-
+            $(".wrap").on("click", ".close-btn", function() {
+                $(this).parent().fadeOut(250, function() {
+                    var word = $(this).parent().find(".buut").val();
                     for (var jNumber = 0; jNumber < stringWords.length; jNumber++) {
-                        var word = $(this).parent().children().children(".buut").val();
+
                         if (stringWords[jNumber] === word) {
                             wordsId.splice(jNumber, 1);
                             stringWords.splice(jNumber, 1);
@@ -173,11 +179,9 @@
                     var ss = JSON.stringify(wordsId);
                     $("#IndexArray").val(ss);
                     $(this).remove();
-                
                 });
 
             });
-
 
             $("#tabs").tabs({
                 show: { effect: "fadeIn", duration: 800 }
@@ -186,10 +190,8 @@
             $("#Paid").change(function() {
                 var check = $(this).prop('checked');
                 if (check) {
-                    // $("#CostDiv").css("visibility", "");
                     $("#CostDiv").fadeIn();
                 } else {
-                    //  $("#CostDiv").css("visibility", "hidden");
                     $("#CostDiv").fadeOut();
                 }
             });
@@ -200,21 +202,21 @@
                         type: "POST",
                         dataType: "json",
                         data: { term: request.term },
-                        success: function (data) {
+                        success: function(data) {
                             allData = data;
                             response($.map(data, function(item) {
                                 return { value: item.EnglishWord };
-                            }))
+                            }));
 
                         }
-                    })
+                    });
                 },
                 messages: {
                     noResults: "",
                     results: ""
                 }
             });
-        })
+        });
 
     </script>
 }
