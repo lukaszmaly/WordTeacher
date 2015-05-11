@@ -32,39 +32,71 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+
+
             </div>
         </div>
-        <input type="button" id="AddUsage" name="AddUsage" value="Add Usage"/>
-        <div id="usages">
-            <p>Lista</p>
+        <div class="form-group">
+            @Html.Label("Usage", htmlAttributes: new { @class = "control-label col-md-2" })
+          
+            <div class="col-md-10">
+                @Html.TextBox("Usage", "", new { @class = "form-control" })
+                <input type="button" id="AddUsage" class="btn btn-default" value="Add" />
+             
+                <div class="wrap">
+
+                </div>
+                <div id="usages">
+
+                </div>
+            </div>
+            
         </div>
+      
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+   
+    
 </div>
 
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-
+@Styles.Render("~/Content/themes/base/wrap.css")
     
     <script type="text/javascript">
         var i = 0;
         $(document).ready(function() {
-            $("#AddUsage").click(function() {
-                var newEntry = $("<p>Usage: <input type='text' name='usage" + i + "'/><input type='button' class='remove' value='Remove' id='remove" + i + "'/> </p>");
-                $("#usages").append(newEntry);
-                newEntry.hide().fadeIn(500);
-                i = i + 1;
+
+
+            $("#AddUsage").click(function () {
+
+                        var newEntry = $(" " +
+                            "" +
+                            "  <div class='box'> <span id='remove" + i + "' class='close-btn'><a href='#'>X</a></span> <div class='boxInner'>  <p> " + $('#Usage').val() + " </p>   </div> <input type='hidden' class='buut' readonly name='usage" + i + "' value='" + $('#Usage').val() + "'/></div>");
+                        $("#usages").append(newEntry);
+                        newEntry.hide().fadeIn(500);
+                        i = i + 1;
+
+
             });
-            $("#usages").on("click", ".remove", function() {
-                $(this).parent().fadeOut(250, function() {
+
+
+            $("#usages").on("click", ".close-btn", function () {
+                $(this).parent().fadeOut(250, function () {
                     $(this).remove();
                 });
 
             });
+
+
+
+
+
+
 
         });
 

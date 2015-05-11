@@ -28,8 +28,36 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+
+
             </div>
         </div>
+        <div class="form-group">
+            @Html.Label("Usage", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="col-md-10">
+                @Html.TextBox("Usage", "", new { @class = "form-control" })
+                
+
+              
+            </div>
+
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" id="AddUsage" class="btn btn-default" value="Add Usage" />
+                <div class="wrap">
+
+                </div>
+                <div id="usages">
+
+                </div>
+
+            </div>
+        </div>
+
     </div>
 }
 
@@ -37,6 +65,68 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@section Scripts {@Styles.Render("~/Content/themes/base/autocomplete.css")
+@Styles.Render("~/Content/themes/base/wrap.css")
+@Scripts.Render("~/bundles/jqueryval")
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"> </script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"> </script>
+<script type="text/javascript">
+        var i = 0;
+
+        var stringWords = [];
+        @{
+
+            foreach (var a in Model.Usages)
+            {
+<text>
+        stringWords.push('@a.Usage');
+</text>
+            }
+
+        }
+
+
+        function Load() {
+            for (var j = 0; j < stringWords.length; j++) {
+                var newEntry = $("<div class='box'> <span id='remove" + j + "' class='close-btn'><a href='#'>X</a></span> <div class='boxInner'>  <p> " + stringWords[j] + " </p>   </div> <input type='hidden' class='buut' readonly name='usage" + j + "' value='" + stringWords[j] + "'/></div>");
+                $("#usages").append(newEntry);
+                newEntry.hide().fadeIn(500);
+                i = j;
+            }
+        }
+
+        $(document).ready(function() {
+            Load();
+
+
+
+            $("#AddUsage").click(function () {
+
+                var newEntry = $(" " +
+                    "" +
+                    "  <div class='box'> <span id='remove" + i + "' class='close-btn'><a href='#'>X</a></span> <div class='boxInner'>  <p> " + $('#Usage').val() + " </p>   </div> <input type='hidden' class='buut' readonly name='usage" + i + "' value='" + $('#Usage').val() + "'/></div>");
+                $("#usages").append(newEntry);
+                newEntry.hide().fadeIn(500);
+                i = i + 1;
+
+
+            });
+
+
+            $("#usages").on("click", ".close-btn", function () {
+                $(this).parent().fadeOut(250, function () {
+                    $(this).remove();
+                });
+
+            });
+
+
+
+
+
+
+        });
+
+</script>
 }

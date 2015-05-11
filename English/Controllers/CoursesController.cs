@@ -105,16 +105,16 @@ namespace English.Controllers
 
                 string inn = Request.Form["IndexArray"];
                 var aa = new JavaScriptSerializer().Deserialize<List<int>>(inn);
-
-
-                course.Entries = new Collection<Entry>();
-                foreach (var v in aa)
+                if (aa != null)
                 {
+                    course.Entries = new Collection<Entry>();
+                    foreach (var v in aa)
+                    {
 
-                    course.Entries.Add(db.Entries.Find(v));
+                        course.Entries.Add(db.Entries.Find(v));
+                    }
+
                 }
-
-
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
