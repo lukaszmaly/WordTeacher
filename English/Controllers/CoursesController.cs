@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using English.Models;
 using Newtonsoft.Json;
 
@@ -51,6 +53,16 @@ namespace English.Controllers
         {
             if (ModelState.IsValid)
             {
+                string inn = Request.Form["IndexArray"];
+                var aa = new JavaScriptSerializer().Deserialize<List<int>>(inn);
+
+
+                course.Entries = new Collection<Entry>();
+                foreach (var v in aa)
+                {
+                   
+                    course.Entries.Add(db.Entries.Find(v));
+                }
                 db.Courses.Add(course);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -88,7 +100,21 @@ namespace English.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 db.Entry(course).State = EntityState.Modified;
+
+                string inn = Request.Form["IndexArray"];
+                var aa = new JavaScriptSerializer().Deserialize<List<int>>(inn);
+
+
+                course.Entries = new Collection<Entry>();
+                foreach (var v in aa)
+                {
+
+                    course.Entries.Add(db.Entries.Find(v));
+                }
+
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

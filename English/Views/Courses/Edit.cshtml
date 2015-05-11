@@ -8,7 +8,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
+    @Html.Hidden("IndexArray")
 
 
     <div id="tabs">
@@ -125,29 +125,70 @@
     <script src="~/Scripts/jquery-ui-1.11.4.js"> </script>
     <script type="text/javascript">
         var i = 0;
+        var allData = [];
+        var wordsId = [];
+        var stringWords = [];
+        @{
 
-        $(document).ready(function () {
+            foreach (var a in Model.Entries)
+            {
+<text>
+        wordsId.push(@a.EntryId);
+        stringWords.push('@a.EnglishWord');
+</text>
+            }
+            
+        }
 
 
-
-            $("#AddWord").click(function () {
-                var newEntry = $("<p>Usage: <input type='text' name='usage" + i + "' value='" + $('#Country').val() + "'/><input type='button' class='remove' value='Remove' id='remove" + i + "'/> </p>");
+        function Load() {
+            for (var j = 0; j < wordsId.length; j++) {
+                var newEntry = $("<p>Usage: <input type='text' class='buut' name='usage" + j + "' value='" + stringWords[j] + "'/><input type='button' class='remove' value='Remove' id='remove" + j + "'/> </p>");
                 $("#Words").append(newEntry);
                 newEntry.hide().fadeIn(500);
-                i = i + 1;
+                i = j;
+            }
+        }
+
+        $(document).ready(function () {
+            Load();
+   
+
+            $("#AddWord").click(function () {
+                for (var j = 0; j < allData.length; j++) {
+                    if (allData[j].EnglishWord === $('#Country').val() && wordsId.indexOf(allData[j].EntryId) === -1) {
+                        wordsId.push(allData[j].EntryId);
+                        stringWords.push(allData[j].EnglishWord);
+                        var newEntry = $("<p>Usage: <input type='text' class='buut' readonly name='usage" + i + "' value='" + $('#Country').val() + "'/><input type='button' class='remove' value='Remove' id='remove" + i + "'/> </p>");
+                        $("#Words").append(newEntry);
+                        newEntry.hide().fadeIn(500);
+                        var ss = JSON.stringify(wordsId);
+                        $("#IndexArray").val(ss);
+                        i = i + 1;
+                    }
+                }
+
             });
             $("#Words").on("click", ".remove", function () {
                 $(this).parent().fadeOut(250, function () {
+
+                  
+
+
+                    for (var jNumber = 0; jNumber < stringWords.length; jNumber++) {
+                        var word = $(this).parent().children().children(".buut").val();
+                        if (stringWords[jNumber] ===word ) {
+                            wordsId.splice(jNumber, 1);
+                            stringWords.splice(jNumber, 1);
+                        }
+                    }
+                    var ss = JSON.stringify(wordsId);
+                    $("#IndexArray").val(ss);
                     $(this).remove();
+
                 });
 
             });
-
-
-
-
-
-
 
 
             $("#tabs").tabs({
@@ -172,6 +213,7 @@
                         dataType: "json",
                         data: { term: request.term },
                         success: function (data) {
+                            allData = data;
                             response($.map(data, function (item) {
                                 return { value: item.EnglishWord };
                             }))
@@ -180,7 +222,8 @@
                     })
                 },
                 messages: {
-                    noResults: "", results: ""
+                    noResults: "",
+                    results: ""
                 }
             });
         })
