@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -24,12 +25,22 @@ namespace English.Controllers
             return View(wordForUser);
         }
 
+
+        public ActionResult AddPoints(int Points)
+        {
+            String username = User.Identity.GetUserName();
+            GameUser user = db.GameUsers.FirstOrDefault(u => u.UserName == username);
+            user.Points += Points;
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+            return Content("OK");
+        }
+
         public PartialViewResult GetSandwitches()
         {
             var entry = db.Entries.OrderBy(a => System.Guid.NewGuid()).FirstOrDefault();
             
             return PartialView("_Restaurant",entry);
-
         }
 
     }
