@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using English.Models;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 
 namespace English.Controllers
@@ -139,6 +140,7 @@ namespace English.Controllers
         // POST: Courses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+      
         public ActionResult DeleteConfirmed(int id)
         {
             Course course = db.Courses.Find(id);
@@ -147,7 +149,25 @@ namespace English.Controllers
             return RedirectToAction("Index");
         }
 
-
+        [ActionName("Join")]
+        [Authorize]
+        public ActionResult JoinToCourse(int id)
+        {
+            string username = User.Identity.GetUserName();
+            GameUser user = db.GameUsers.FirstOrDefault(u => u.UserName == username);
+            if (user.Courses == null)
+            {
+                user.Courses = new Collection<Course>();
+            }
+            var course = db.Courses.Find(id);
+            if (course != null)
+            {
+                user.Courses.Add(course);
+            }
+            db.Entry(user).State=EntityState.Modified;
+            db.SaveChanges();
+            return View("Index",db.Courses.ToList());  
+        }
 
         public JsonResult AutoCompleteWord(string term)
         {

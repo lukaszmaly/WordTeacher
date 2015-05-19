@@ -20,6 +20,6 @@ namespace English.Models
         [Range(1,999,ErrorMessage = "[1-999]")]
         public int?  Cost { get; set; }
         public virtual ICollection<Entry> Entries { get; set; }
-
+        public virtual ICollection<GameUser> Users { get; set; } 
     }
 }

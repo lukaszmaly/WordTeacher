@@ -12,11 +12,13 @@ namespace English.Models
         public int Points { get; set; }
         public int Health { get; set; }
         public int MaxHealth { get; set; }
+        virtual public ICollection<Course> Courses { get; set; }   
 
         public GameUser()
         {
             
         }
+
         public GameUser(string userName)
         {
             this.UserName = userName;
