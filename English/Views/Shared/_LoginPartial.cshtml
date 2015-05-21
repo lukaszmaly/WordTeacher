@@ -14,7 +14,11 @@
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
           
         </li>
-        <li><a>Total Points:<span id="Points">@a.Points</span></a></li>
+        @if (a != null)
+        {
+            <li><a>Total Points:<span id="Points">@a.Points</span></a></li>
+        }
+        
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
     }

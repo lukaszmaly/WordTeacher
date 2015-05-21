@@ -50,13 +50,14 @@ namespace English.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseId,CourseName,Visible,Cost")] Course course)
+        public ActionResult Create([Bind(Include = "CourseId,CourseName,Visible,Cost,Paid")] Course course)
         {
             if (ModelState.IsValid)
             {
                 string inn = Request.Form["IndexArray"];
                 var aa = new JavaScriptSerializer().Deserialize<List<int>>(inn);
 
+               
 
                 course.Entries = new Collection<Entry>();
                 foreach (var v in aa)
@@ -162,7 +163,11 @@ namespace English.Controllers
             var course = db.Courses.Find(id);
             if (course != null)
             {
-                user.Courses.Add(course);
+                if (course.Paid && user.PremiumPoints >= course.Cost || !course.Paid)
+                {
+                    user.Courses.Add(course);
+                    user.PremiumPoints -= course.Cost.GetValueOrDefault(0);
+                }
             }
             db.Entry(user).State=EntityState.Modified;
             db.SaveChanges();

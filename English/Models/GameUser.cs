@@ -12,6 +12,7 @@ namespace English.Models
         public int Points { get; set; }
         public int Health { get; set; }
         public int MaxHealth { get; set; }
+        public int PremiumPoints { get; set; }
         virtual public ICollection<Course> Courses { get; set; }   
 
         public GameUser()
@@ -24,6 +25,7 @@ namespace English.Models
             this.UserName = userName;
             this.Points = 0;
             this.Health = this.MaxHealth = 100;
+            this.PremiumPoints = 100;
         }
 
     }
