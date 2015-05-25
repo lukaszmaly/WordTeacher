@@ -3,9 +3,7 @@
 @model IEnumerable<English.Models.Course>
 
 @{
-    ViewBag.Title = "Index";
-    var name = User.Identity.GetUserName();
-    var user = new EnglishContext().GameUsers.FirstOrDefault(u => u.UserName == name);
+    ViewBag.Title = "My Courses";
 }
 
 <h2>Index</h2>
@@ -21,9 +19,6 @@
         <th>
             @Html.DisplayNameFor(model => model.Visible)
         </th>
-        <th>
-            @Html.DisplayName("Action")
-        </th>
         <th></th>
     </tr>
     @foreach (var item in Model)
@@ -36,41 +31,15 @@
                 @Html.DisplayFor(modelItem => item.Visible)
             </td>
             <td>
-                @{
-                    if(user!=null && user.Courses.Count(c => c.CourseId == item.CourseId) == 0 && ((item.Paid && user.PremiumPoints>=item.Cost) || !item.Paid))
-                    {
-                        @Ajax.ActionLink("Join", "Join", new {id = item.CourseId}, new AjaxOptions {OnComplete = "Join(this);"}, new {@class = "btn btn-default", id = "Join" + item.CourseId})
-                    }
-                    else if (user != null && user.Courses.Count(c => c.CourseId == item.CourseId) == 0 && item.Paid && user.PremiumPoints < item.Cost)
-                    {
-                        @Ajax.ActionLink("Join", "Join", new { id = item.CourseId }, new AjaxOptions { OnComplete = "Join(this);" }, new { @class = "btn btn-warning disabled", id = "Join" + item.CourseId })
-                    }
-                    else if (user != null)
-                    {
-                        @Ajax.ActionLink("Join", "Join", new { id = item.CourseId }, new AjaxOptions { OnComplete = "Join(this);" }, new { @class = "btn btn-success disabled", id = "Join" + item.CourseId })
-                    }
-                }
-            </td>
-            <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.CourseId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.CourseId })
             </td>
         </tr>
     }
-
 </table>
+
 @section Scripts
 {
     @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
     @Scripts.Render("~/bundles/jqueryval")
-
-    <script type="text/javascript">
-        function Join(e) {
-            $(e).removeClass("btn-default");
-            $(e).addClass("btn-success");
-            $(e).addClass("disabled");
-            alert("Joined!");
-            location.reload();
-        }
-    </script>
 }
