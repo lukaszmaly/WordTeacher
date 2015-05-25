@@ -3,24 +3,11 @@
 @{
     ViewBag.Title = "Index";
 }
-<h2 id="doZamiany">fdgd</h2>
-
-
-
-<p>@Model.GameUser.UserName</p>
-
-<h2 id="Points">@Model.GameUser.Points</h2>
-
-
+<h2>Game</h2>
 <div style="text-align: center;">
-
     <div id="game" style="margin-left: auto;margin-right: auto;">
         <p id="Word"></p>
-
-
-
-
-</div>
+    </div>
 </div>
 
 
@@ -39,7 +26,13 @@
             haze.insertBefore("#Points");
             haze.css("top", y + "px");
             haze.animate({ opacity: 0, top: y - 20 }, 600, function() {});
-
+            $.ajax({
+                url: "/Learn/AddPoints",
+                type: "POST",
+                data: { Points: n }
+            }).error(function (data) {
+                alert("Error");
+            });
         }
 
         var button = $('<p><input type="text" name="question" id="Question"/><p>' +
