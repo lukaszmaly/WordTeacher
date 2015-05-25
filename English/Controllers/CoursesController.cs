@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 
 namespace English.Controllers
 {
+    [Authorize]
     public class CoursesController : Controller
     {
         private EnglishContext db = new EnglishContext();
@@ -21,7 +22,9 @@ namespace English.Controllers
         // GET: Courses
         public ActionResult Index()
         {
-            return View(db.Courses.ToList());
+                string username = User.Identity.GetUserName();
+            GameUser user = db.GameUsers.FirstOrDefault(u => u.UserName == username);
+            return View(db.Courses.Where(course=>course.Owner==user.GameUserId).ToList());
         }
 
         // GET: Courses/Details/5
@@ -54,10 +57,13 @@ namespace English.Controllers
         {
             if (ModelState.IsValid)
             {
+                string username = User.Identity.GetUserName();
+                GameUser user = db.GameUsers.FirstOrDefault(u => u.UserName == username);
+                
                 string inn = Request.Form["IndexArray"];
                 var aa = new JavaScriptSerializer().Deserialize<List<int>>(inn);
 
-               
+                course.Owner = user.GameUserId;
 
                 course.Entries = new Collection<Entry>();
                 foreach (var v in aa)
@@ -190,6 +196,11 @@ namespace English.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult Browse()
+        {
+            return View(db.Courses.Where(course=> course.Visible).ToList());
         }
     }
 }

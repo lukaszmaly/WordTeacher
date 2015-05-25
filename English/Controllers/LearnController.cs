@@ -14,18 +14,23 @@ namespace English.Controllers
     {
         private EnglishContext db = new EnglishContext();
         // GET: Learn
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
             var wordForUser = new WordForUser();
             string name = User.Identity.GetUserName();
-        //    wordForUser.GameUser = db.GameUsers.First(a => a.UserName == name);
-            wordForUser.GameUser = new GameUser();
-            wordForUser.GameUser.UserName = "dsfds";
-            wordForUser.WordCollection = db.Entries.ToList();
+            wordForUser.GameUser = db.GameUsers.First(a => a.UserName == name);
+            //wordForUser.GameUser = new GameUser();
+
+            wordForUser.WordCollection =
+                db.Courses.Where(course => course.CourseId == id).Select(c => c.Entries).First().ToList();
+            if (wordForUser.WordCollection.Count == 0)
+            {
+                RedirectToAction("Browse", "Courses");
+            }
+
             return View(wordForUser);
         }
-
-
+   
         public ActionResult AddPoints(int Points)
         {
             String username = User.Identity.GetUserName();

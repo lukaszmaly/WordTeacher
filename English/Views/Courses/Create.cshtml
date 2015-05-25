@@ -1,7 +1,11 @@
-﻿@model English.Models.Course
+﻿@using English.Models
+@using Microsoft.AspNet.Identity
+@model English.Models.Course
 
 @{
     ViewBag.Title = "Create";
+     var name = User.Identity.GetUserName();
+    var user = new EnglishContext().GameUsers.FirstOrDefault(u => u.UserName == name);
 }
 
 
@@ -12,7 +16,6 @@
 {
     @Html.AntiForgeryToken()
     @Html.Hidden("IndexArray")
-
 
     <div id="tabs">
         <ul>
