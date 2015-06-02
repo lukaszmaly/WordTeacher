@@ -173,6 +173,15 @@ namespace English.Controllers
                 {
                     user.Courses.Add(course);
                     user.PremiumPoints -= course.Cost.GetValueOrDefault(0);
+                    if(user.UserWords==null)
+                    {
+                        user.UserWords = new List<UserWords>();
+                    }
+                    var WordsList = course.Entries;
+                    foreach(var word in WordsList)
+                    {
+                        user.UserWords.Add(new UserWords() { Strike = 0, LastUseage = DateTime.Now, entry = word,Course=course });
+                    }
                 }
             }
             db.Entry(user).State=EntityState.Modified;

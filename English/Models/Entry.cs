@@ -16,5 +16,6 @@ namespace English.Models
         public bool Visible { get; set; }
 
         public virtual ICollection<WordUsage> Usages { get; set; }
+        public virtual ICollection<UserWords> UsersWords { get; set; }
     }
 }
