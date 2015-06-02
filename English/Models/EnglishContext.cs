@@ -21,10 +21,9 @@ namespace English.Models
         }
 
         public System.Data.Entity.DbSet<English.Models.Entry> Entries { get; set; }
-
         public System.Data.Entity.DbSet<English.Models.WordUsage> WordUsages { get; set; }
         public System.Data.Entity.DbSet<English.Models.GameUser> GameUsers { get; set; }
-
         public System.Data.Entity.DbSet<English.Models.Course> Courses { get; set; }
+        public System.Data.Entity.DbSet<English.Models.UserWords> UsersWords { get; set; }
     }
 }

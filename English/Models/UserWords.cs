@@ -14,6 +14,16 @@ namespace English.Models
         public DateTime LastUsage { get; set; }
         public Course Course { get; set; }
 
+        public bool ContainWord(string word)
+        {
+            foreach (var e in entry.Usages)
+            {
+                if (e.Usage == word)
+                    return true;
+            }
+            return false;
+        }
+
         public int GetDays(int step)
         {
             if (step == 1) return 1;

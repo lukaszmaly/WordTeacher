@@ -20,9 +20,11 @@ namespace English.Controllers
             string name = User.Identity.GetUserName();
             wordForUser.GameUser = db.GameUsers.First(a => a.UserName == name);
             //wordForUser.GameUser = new GameUser();
-
+            //     db.Courses.Where(course => course.CourseId == id).Select(c => c.Entries).First().ToList();
             wordForUser.WordCollection =
-                db.Courses.Where(course => course.CourseId == id).Select(c => c.Entries).First().ToList();
+            db.UsersWords.Where(collection => collection.Course.CourseId == id && collection.IsTimeToLearn()).Select(c => c.entry).ToList();
+            
+            
             if (wordForUser.WordCollection.Count == 0)
             {
                 RedirectToAction("Browse", "Courses");
@@ -41,10 +43,30 @@ namespace English.Controllers
             return Content("OK");
         }
 
+        public ActionResult CheckWord(int id,string answer)
+        {
+            String username = User.Identity.GetUserName();
+            GameUser user = db.GameUsers.FirstOrDefault(u => u.UserName == username);
+            var Usage = db.UsersWords.Where(usage => usage.UserWordsId == id).FirstOrDefault();
+            if(Usage.ContainWord(answer))
+            {
+                user.Points += Points;
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                Usage.LearnResult(true);
+            }
+            else
+            {
+                Usage.LearnResult(false);
+            }
+            db.Entry(Usage).State = EntityState.Modified;
+            db.SaveChanges();
+            return Content("OK");
+        }
+
         public PartialViewResult GetSandwitches()
         {
             var entry = db.Entries.OrderBy(a => System.Guid.NewGuid()).FirstOrDefault();
-            
             return PartialView("_Restaurant",entry);
         }
 
