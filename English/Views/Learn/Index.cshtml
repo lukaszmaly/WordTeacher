@@ -33,7 +33,7 @@
             $.ajax({
                 url: "/Learn/CheckWord",
                 type: "POST",
-                data: { Points: n, Answer: answer, Id: wordId }
+                data: { Points: n, Answer: answer, Id: wordId,CourseId:courseId }
             }).error(function (data) {
                 alert("Error");
             }).success(function (data) {
@@ -41,6 +41,7 @@
                 {
                     AddPoints(n);
                 }
+                AlternativeWords(data.alternatives);
             });
         }
 
@@ -53,7 +54,6 @@
         var id = 0;
 
         $("#game").on("click", "#Next", function() {
-
             if ($("#Next").val() === "Check") {
                 Check($("#Question").val(),id);
                 $("#Next").val("Next Word");
@@ -63,7 +63,6 @@
             }
         });
 
-
         function GetNewWord() {
             $.ajax({
                 url: "/Learn/GetSandwitches",
@@ -72,6 +71,11 @@
             }).success(function(data) {
                 data = data.replace(/&quot;/ig, '"');
                 var jqObj = JSON.parse(data);
+                if(jqObj==null)
+                {
+                    alert("You have completed lesson");
+                    location.reload();
+                }
                 $("#Word").text(jqObj["EnglishWord"]);
                 a = [];
                 id = jqObj["EntryId"];
@@ -85,7 +89,7 @@
     }
 
 
-        function AlternativeWords() {
+        function AlternativeWords(a) {
 
             $("#AlternativeForms").html("").show();
         var additional = $("<p>Alternative proper answers:</p>");

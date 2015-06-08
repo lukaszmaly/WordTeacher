@@ -21,5 +21,21 @@ namespace English.Models
         public int?  Cost { get; set; }
         public virtual ICollection<Entry> Entries { get; set; }
         public virtual ICollection<GameUser> Users { get; set; } 
+
+        public Course(Course course)
+        {
+            CourseId = course.CourseId;
+            Owner = course.Owner;
+            CourseName = course.CourseName;
+            Visible = course.Visible;
+            Paid = course.Paid;
+            Cost = course.Cost;
+            Entries = course.Entries;
+            Users = course.Users;
+    }
+        public Course()
+        {
+
+        }
     }
 }

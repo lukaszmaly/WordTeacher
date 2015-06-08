@@ -37,11 +37,17 @@
                     {
                         @Ajax.ActionLink("Join", "Join", new { id = item.CourseId }, new AjaxOptions { OnComplete = "Join(this);" }, new { @class = "btn btn-warning disabled", id = "Join" + item.CourseId })
                     }
-                    else if (user != null)
+                    else if (user != null && user.UserWords.Count(u=>u.IsTimeToLearn && u.Course.CourseId==item.CourseId)==0)
                     {
-                        @Html.ActionLink("Learn", "Index", "Learn",new{id=item.CourseId}, new {@class = "btn btn-default"})
+                        
+                        @Html.ActionLink("Done", "Index", "Learn", new { id = item.CourseId }, new { @class = "btn btn-success" })
                     }
-                }
+                    else if (user != null )
+                    {
+
+                        @Html.ActionLink("Learn", "Index", "Learn", new { id = item.CourseId }, new { @class = "btn btn-default" })
+                    }
+}
             </td>
      
         </tr>

@@ -180,7 +180,7 @@ namespace English.Controllers
                     var WordsList = course.Entries;
                     foreach(var word in WordsList)
                     {
-                        user.UserWords.Add(new UserWords() { Strike = 0, LastUsage = DateTime.Now, entry = word,Course=course });
+                        user.UserWords.Add(new UserWords() { Strike = 0, IsTimeToLearn=true, LastUsage = DateTime.Now, entry = word,Course=course });
                     }
                 }
             }
