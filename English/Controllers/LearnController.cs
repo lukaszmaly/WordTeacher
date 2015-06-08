@@ -73,6 +73,7 @@ namespace English.Controllers
                 Usage.LearnResult(false);
                 result.Add("result", "no");
             }
+            Usage.Update();
             db.Entry(Usage).State = EntityState.Modified;
             db.SaveChanges();
 
