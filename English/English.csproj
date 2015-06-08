@@ -166,11 +166,11 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LearnController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\RankingController.cs" />
     <Compile Include="Controllers\WordUsagesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\EnglishContext.cs" />
@@ -178,9 +178,11 @@
     <Compile Include="Models\GameUser.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\UserWords.cs" />
     <Compile Include="Models\WordUsage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\CourseUserWords.cs" />
     <Compile Include="ViewModels\WordForUser.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +193,7 @@
     </Content>
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\wrap.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
     <Content Include="Content\themes\base\base.css" />
     <Content Include="Content\themes\base\button.css" />
@@ -297,6 +300,8 @@
     <Content Include="Views\Courses\Details.cshtml" />
     <Content Include="Views\Courses\Edit.cshtml" />
     <Content Include="Views\Courses\Index.cshtml" />
+    <Content Include="Views\Courses\Browse.cshtml" />
+    <Content Include="Views\Ranking\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

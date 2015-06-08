@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<English.Models.GameUser>
+
+@{
+    ViewBag.Title = "Ranking";
+    int i = 1;
+    var name = User.Identity.GetUserName();
+   // var user = new EnglishContext().GameUsers.FirstOrDefault(u => u.UserName == name);
+}
+
+<h2>Ranking</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            <p>Position</p>
+        </th>
+        <th>
+           <p>Login</p>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Points)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr class='@(item.UserName ==name?"success":"active")'>
+            <td>
+                <p>@(i++)</p>
+            </td>
+            <td>
+                @if (item.UserName == name)
+                {
+                    <b>You</b>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.UserName);
+                }
+                
+            </td>
+
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Points)
+            </td>
+        </tr>
+        }
+
+    </table>
