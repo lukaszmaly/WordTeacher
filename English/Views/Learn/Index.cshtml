@@ -16,7 +16,8 @@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"> </script>
 
     <script type="text/javascript">
-
+        var n = 20;
+        var courseId=@ViewBag.CourseId;
         function AddPoints(n) {
             var haze = $('<h2 style="position:absolute;">+' + n + '!</h2>');
             var p = parseInt($("#Points").text());
@@ -35,6 +36,36 @@
             });
         }
 
+        function Check(answer,wordId) {
+            //var haze = $('<h2 style="position:absolute;">+' + n + '!</h2>');
+            //var p = parseInt($("#Points").text());
+            //p = p + n;
+            //$("#Points").text(p);
+            //var y = $("#Points").position().top;
+            //haze.insertBefore("#Points");
+            //haze.css("top", y + "px");
+            //haze.animate({ opacity: 0, top: y - 20 }, 600, function () { });
+            $.ajax({
+                url: "/Learn/CheckWord",
+                type: "POST",
+                data: { Points: n, Answer: answer, Id: wordId }
+            }).error(function (data) {
+                alert("Error");
+            }).success(function (data) {
+              //  data = data.replace(/&quot;/ig, '"');
+            //    var jqObj = JSON.parse(data);
+              //  var dsf = jqObj;
+                if(data.result==="yes")
+                {
+                    alert("Ok");
+                }
+                if (data.result === "no") {
+                    alert("no");
+                }
+            });
+        }
+
+
         var button = $('<p><input type="text" name="question" id="Question"/><p>' +
             '<p><input type="button" id="Next" value="Check" name="next"/></p>' +
             '<div id="AlternativeForms"></div>');
@@ -46,19 +77,10 @@
         $("#game").on("click", "#Next", function() {
 
             if ($("#Next").val() === "Check") {
-
-                if (a.indexOf($("#Question").val()) != -1) {
-
-                  
-                    AlternativeWords();
-                    AddPoints(20);
-                } else {
-                    alert("zle");
-                }
+                Check($("#Question").val(),id);
                 $("#Next").val("Next Word");
             } else {
                 $("#AlternativeForms").hide();
-              
                 GetNewWord();
             }
         });
@@ -68,15 +90,13 @@
             $.ajax({
                 url: "/Learn/GetSandwitches",
                 type: "POST",
-                data: { a: "sdfsd" }
-               
-               
-
+                data: { Id: courseId }
             }).success(function(data) {
                 data = data.replace(/&quot;/ig, '"');
                 var jqObj = JSON.parse(data);
                 $("#Word").text(jqObj["EnglishWord"]);
                 a = [];
+                id = jqObj["EntryId"];
                 for (var i = 0; i < jqObj["Usages"].length; i++) {
                     a.push(jqObj["Usages"][i]["Usage"]);
                 }
