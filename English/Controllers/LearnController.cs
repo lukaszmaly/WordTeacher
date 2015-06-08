@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using English.ViewModels;
 using English.Models;
 using Microsoft.AspNet.Identity;
-
+using System.Collections;
 namespace English.Controllers
 {
     public class LearnController : Controller
@@ -21,15 +21,26 @@ namespace English.Controllers
             wordForUser.GameUser = db.GameUsers.First(a => a.UserName == name);
             //wordForUser.GameUser = new GameUser();
             //     db.Courses.Where(course => course.CourseId == id).Select(c => c.Entries).First().ToList();
-            wordForUser.WordCollection =
-            db.UsersWords.Where(collection => collection.Course.CourseId == id && collection.IsTimeToLearn()).Select(c => c.entry).ToList();
-            
+
+          var aa = db.UsersWords.Where(collection => collection.Course.CourseId == id && collection.GameUsers.Count(u=>u.GameUserId== wordForUser.GameUser.GameUserId)>0);
+
+          foreach(var entry in aa.ToList())
+          {
+              entry.Update();
+              db.Entry(entry).State = EntityState.Modified;
+          }
+          db.SaveChanges();
+          var bb = db.UsersWords.Where(collection => collection.Course.CourseId == id && collection.GameUsers.Count(u => u.GameUserId == wordForUser.GameUser.GameUserId) > 0);
+
+              wordForUser.WordCollection =
+              db.UsersWords.Where(collection => collection.Course.CourseId == id && collection.IsTimeToLearn).Select(c => c.entry).ToList();
+          
             
             if (wordForUser.WordCollection.Count == 0)
             {
-                RedirectToAction("Browse", "Courses");
+              return  RedirectToAction("Browse", "Courses");
             }
-
+            ViewBag.CourseId = id;
             return View(wordForUser);
         }
    
@@ -43,30 +54,36 @@ namespace English.Controllers
             return Content("OK");
         }
 
-        public ActionResult CheckWord(int id,string answer)
+        public JsonResult CheckWord(int Id,string Answer,int Points)
         {
             String username = User.Identity.GetUserName();
+             var result = new Hashtable();
             GameUser user = db.GameUsers.FirstOrDefault(u => u.UserName == username);
-            var Usage = db.UsersWords.Where(usage => usage.UserWordsId == id).FirstOrDefault();
-            if(Usage.ContainWord(answer))
+            var Usage = db.UsersWords.Where(usage => usage.UserWordsId == Id).FirstOrDefault();
+            if (Usage.ContainWord(Answer))
             {
                 user.Points += Points;
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 Usage.LearnResult(true);
+                result.Add("result", "yes");
             }
             else
             {
                 Usage.LearnResult(false);
+                result.Add("result", "no");
             }
             db.Entry(Usage).State = EntityState.Modified;
             db.SaveChanges();
-            return Content("OK");
+
+            db.Configuration.LazyLoadingEnabled = false;
+            db.Configuration.ProxyCreationEnabled = false;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public PartialViewResult GetSandwitches()
+        public PartialViewResult GetSandwitches(int Id)
         {
-            var entry = db.Entries.OrderBy(a => System.Guid.NewGuid()).FirstOrDefault();
+            var entry = db.UsersWords.Where(collection => collection.Course.CourseId == Id && collection.IsTimeToLearn).Select(c => c.entry).OrderBy(a => System.Guid.NewGuid()).FirstOrDefault();
             return PartialView("_Restaurant",entry);
         }
 
