@@ -27,24 +27,9 @@
             haze.insertBefore("#Points");
             haze.css("top", y + "px");
             haze.animate({ opacity: 0, top: y - 20 }, 600, function() {});
-            $.ajax({
-                url: "/Learn/AddPoints",
-                type: "POST",
-                data: { Points: n }
-            }).error(function (data) {
-                alert("Error");
-            });
         }
 
         function Check(answer,wordId) {
-            //var haze = $('<h2 style="position:absolute;">+' + n + '!</h2>');
-            //var p = parseInt($("#Points").text());
-            //p = p + n;
-            //$("#Points").text(p);
-            //var y = $("#Points").position().top;
-            //haze.insertBefore("#Points");
-            //haze.css("top", y + "px");
-            //haze.animate({ opacity: 0, top: y - 20 }, 600, function () { });
             $.ajax({
                 url: "/Learn/CheckWord",
                 type: "POST",
@@ -52,19 +37,12 @@
             }).error(function (data) {
                 alert("Error");
             }).success(function (data) {
-              //  data = data.replace(/&quot;/ig, '"');
-            //    var jqObj = JSON.parse(data);
-              //  var dsf = jqObj;
                 if(data.result==="yes")
                 {
-                    alert("Ok");
-                }
-                if (data.result === "no") {
-                    alert("no");
+                    AddPoints(n);
                 }
             });
         }
-
 
         var button = $('<p><input type="text" name="question" id="Question"/><p>' +
             '<p><input type="button" id="Next" value="Check" name="next"/></p>' +
